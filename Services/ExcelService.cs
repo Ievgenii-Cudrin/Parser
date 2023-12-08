@@ -28,11 +28,11 @@ namespace Parser.Services
                         var phoneNumber = worksheet.Cell(i, j).ToString();
                         try
                         {
-                            Console.WriteLine(i);
                             var secretNames = SiteParser.GetSecretNames(driverAfterLogin, phoneNumber, shouldReturn);
                             ws.Range[i, 1].Value = phoneNumber;
                             ws.Range[i, 2].Value = String.Join(", ", secretNames.ToArray());
                             shouldReturn = true;
+                            Console.WriteLine(i + ". " + phoneNumber + " - " + secretNames.ToArray());
                         }
                         catch(Exception ex)
                         {
