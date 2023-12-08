@@ -1,6 +1,5 @@
 ﻿using Bt = Bytescout.Spreadsheet;
 using Spire.Xls;
-using Excel = Spire.Xls;
 
 namespace Parser.Services
 {
@@ -36,22 +35,25 @@ namespace Parser.Services
                         }
                         catch(Exception ex)
                         {
-                            DateTime d = DateTime.Now;
-                            document.Close();
-                            ws.AllocatedRange.AutoFitColumns();
-                            ws.SaveToFile("copy" + d.ToString().Replace(" ", "").Replace(".", "").Replace(":", "") + ".xls", " ");
+                            SaveFile(ws, document);
                             driverAfterLogin.Quit();
                         }
                     }
                 }
 
-                DateTime dt = DateTime.Now;
-                document.Close();
-                ws.AllocatedRange.AutoFitColumns();
-                ws.SaveToFile("copy" + dt.ToString().Replace(" ", "").Replace(".", "").Replace(":", "") + ".xls", " ");
+                SaveFile(ws, document);
             }
 
             driverAfterLogin.Quit();
+        }
+
+        private static void SaveFile(Worksheet ws, Bt.Spreadsheet document)
+        {
+            DateTime d = DateTime.Now;
+            document.Close();
+            ws.AllocatedRange.AutoFitColumns();
+            ws.SaveToFile("copy" + d.ToString().Replace(" ", "").Replace(".", "").Replace(":", "") + ".xls", " ");
+
         }
     }
 }
