@@ -66,7 +66,7 @@ namespace Parser.Services
 
         private static void AddDataToInputByName(ChromeDriver driver, string phoneNumber, string tagName, int sleep)
         {
-            var searchString = driver.FindElement(By.Name("searchString"));
+            var searchString = driver.FindElement(By.Name(tagName));
             searchString.SendKeys(phoneNumber);
             Thread.Sleep(sleep);
         }

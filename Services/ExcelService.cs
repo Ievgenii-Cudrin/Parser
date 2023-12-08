@@ -21,13 +21,14 @@ namespace Parser.Services
                 workbook.Worksheets.Clear();
                 var ws = workbook.Worksheets.Add("WriteToCell");
 
-                for (int i = 158; i <= 165; i++)
+                for (int i = 165; i <= 180; i++)
                 {
                     for (int j = 0; j < 1; j++)
                     {
                         var phoneNumber = worksheet.Cell(i, j).ToString();
                         try
                         {
+                            Console.WriteLine(i);
                             var secretNames = SiteParser.GetSecretNames(driverAfterLogin, phoneNumber, shouldReturn);
                             ws.Range[i, 1].Value = phoneNumber;
                             ws.Range[i, 2].Value = String.Join(", ", secretNames.ToArray());
