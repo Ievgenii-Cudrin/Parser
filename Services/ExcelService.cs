@@ -31,10 +31,10 @@ namespace Parser.Services
                         {
                             var index = i + 1;
                             var secretNames = SiteParser.GetSecretNames(driverAfterLogin, phoneNumber, shouldReturn);
-                            ws.Range[i, 1].Value = i.ToString() + ". " +  phoneNumber;
+                            ws.Range[i, 1].Value = index.ToString() + ". " +  phoneNumber;
                             ws.Range[i, 2].Value = String.Join(", ", secretNames.ToArray());
                             shouldReturn = true;
-                            Console.WriteLine(i.ToString() + ". " + phoneNumber + " - " + String.Join(", ", secretNames.ToArray()));
+                            Console.WriteLine(index.ToString() + ". " + phoneNumber + " - " + String.Join(", ", secretNames.ToArray()));
                         }
                         catch(Exception ex)
                         {
