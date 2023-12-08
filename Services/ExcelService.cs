@@ -21,9 +21,10 @@ namespace Parser.Services
                 workbook.Worksheets.Clear();
                 var ws = workbook.Worksheets.Add("WriteToCell");
 
-                for (int i = 170; i <= 175; i++)
+                for (int i = 180; i <= 200; i++)
+                //for (int i = 0; i <= worksheet.NotEmptyRowMax - 1; i++)
                 {
-                    for (int j = 0; j < 1; j++)
+                        for (int j = 0; j < 1; j++)
                     {
                         var phoneNumber = worksheet.Cell(i, j).ToString();
                         try
