@@ -4,6 +4,6 @@ class Program
 {
     static void Main()
     {
-        ExcelService.RunExcel();
+        FileService.RunParser();
     }
 }
