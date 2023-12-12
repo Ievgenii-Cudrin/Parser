@@ -5,10 +5,15 @@ namespace Parser.Services
 {
     public static class FileService
     {
+        private const string psbBaseUrl = "https://ib.psbank.ru/lk/products/summary";
+        private const string tinBaseUrl = "https://www.tinkoff.ru/mybank/";
+
         public static void RunParser()
         {
-            var filesWithNumbers = Settings.Settings.GetFileTypeFromUser() == "1" ? GetDataFromExcelFile() : GetDataFromTxtFile();
-            var driverAfterLogin = SiteParser.LoginToSite();
+            var siteId = Settings.Settings.GetInfoTypeFromUser("ПСБ", "Тиня");
+            var filesWithNumbers = Settings.Settings.GetInfoTypeFromUser("excel.xlsx", ".txt - файл с Генчика") == "1" ? 
+                GetDataFromExcelFile() : GetDataFromTxtFile();
+            var driverAfterLogin = siteId == "1" ? SiteParser.LoginToSite(psbBaseUrl) : SiteParser.LoginToSite(tinBaseUrl);
             var shouldReturn = false;
 
             for (int k = 0; k < filesWithNumbers.Count; k++)
@@ -17,15 +22,16 @@ namespace Parser.Services
                 workbook.Worksheets.Clear();
                 var ws = workbook.Worksheets.Add("WriteToCell");
 
-                for (int i = 10; i <= 20; i++)
+                for (int i = 0; i <= 40; i++)
                 //for (int i = 0; i <= filesWithNumbers[k].Count - 1; i++)
                 {
                     try
                     {
                         var index = i + 1;
-                        var secretNames = SiteParser.GetSecretNames(driverAfterLogin, filesWithNumbers[k][i], shouldReturn);
-                        ws.Range[i, 1].Value = index.ToString() + ". " + filesWithNumbers[k][i];
-                        ws.Range[i, 2].Value = String.Join(", ", secretNames.ToArray());
+                        var secretNames = siteId == "1" ? SiteParser.GetSecretNamesPsb(driverAfterLogin, filesWithNumbers[k][i], shouldReturn) :
+                            SiteParser.GetSecretNamesTin(driverAfterLogin, filesWithNumbers[k][i], shouldReturn);
+                        ws.Range[index, 1].Value = filesWithNumbers[k][i];
+                        ws.Range[index, 2].Value = String.Join(",", secretNames.ToArray());
                         shouldReturn = true;
                         Console.WriteLine(index.ToString() + ". " + filesWithNumbers[k][i] + " - " + String.Join(", ", secretNames.ToArray()));
                     }
@@ -84,11 +90,6 @@ namespace Parser.Services
             DateTime d = DateTime.Now;
             ws.AllocatedRange.AutoFitColumns();
             ws.SaveToFile("copy" + d.ToString().Replace(" ", "").Replace(".", "").Replace(":", "") + ".xls", " ");
-        }
-
-        private static List<string> GetFilesNames(string folderPath)
-        {
-            return Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories).ToList<string>();
         }
     }
 }

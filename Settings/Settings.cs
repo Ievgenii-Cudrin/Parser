@@ -14,16 +14,16 @@ namespace Parser.Settings
             return options;
         }
 
-        public static string GetFileTypeFromUser()
+        public static string GetInfoTypeFromUser(string firtsType, string secondType)
         {
             var userChoice = "";
             var isUserChoiseIsCorrect = false;
 
             do
             {
-                Console.WriteLine("Данные с какого файла читаем? - excel или txt(файл с Генчика):");
-                Console.WriteLine("1. .xlsx");
-                Console.WriteLine("2. .txt - файл с Генчика");
+                Console.WriteLine($"Данные с какого файла читаем? - {firtsType} или {secondType}:");
+                Console.WriteLine($"1. {firtsType}");
+                Console.WriteLine($"2. {secondType}");
                 Console.WriteLine("Введите 1 или 2 и нажмите Enter: ");
                 userChoice = Console.ReadLine();
 

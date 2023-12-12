@@ -5,9 +5,8 @@ namespace Parser.Services
 {
     public static class SiteParser
     {
-        public static ChromeDriver LoginToSite()
+        public static ChromeDriver LoginToSite(string baseUrl)
         {
-            const string baseUrl = "https://ib.psbank.ru/lk/products/summary";
             ChromeOptions options = Settings.Settings.GetChromeOptions();
             IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl(baseUrl);
@@ -16,8 +15,9 @@ namespace Parser.Services
             return (ChromeDriver)driver;
         }
 
-        public static List<string> GetSecretNames(ChromeDriver driver, string phoneNumber, bool shouldReturn)
+        public static List<string> GetSecretNamesPsb(ChromeDriver driver, string phoneNumber, bool shouldReturn)
         {
+            phoneNumber = phoneNumber.Split(" ")[0].Split(".")[1];
             if (shouldReturn)
             {
                 // go back after phone number checking
@@ -56,6 +56,36 @@ namespace Parser.Services
 
             return correctList;
         }
+        public static List<string> GetSecretNamesTin(ChromeDriver driver, string phoneNumber, bool shouldReturn)
+        {
+            if (shouldReturn)
+                PressElemByTagName(driver, "a", 17, 1500);
+
+            // press Send By phone btn
+            PressElemByTagName(driver, "a", 25, 1500);
+
+            phoneNumber = phoneNumber[0].ToString() == "+" ? phoneNumber.Remove(0, 2) : phoneNumber.Remove(0, 1); 
+            // put phone number
+            AddDataToInputByTagName(driver, "input", 0, 1500, phoneNumber);
+            //AddDataToInputByTagName(driver, "input", 0, 2000, "9143735917");
+
+            // press on element to load results
+            PressElemByTagName(driver, "h2", 2, 2000);
+
+            var results = driver.FindElements(By.TagName("button"));
+            var correctList = new List<string>();
+
+            for (int i = 3; i < results.Count - 3; i++)
+            {
+                var info = results[i].Text.Split(Environment.NewLine);
+                if (correctList.Count == 0)
+                    correctList.Add(info[1]);
+
+                correctList.Add(info[0]);
+            }
+
+            return correctList;
+        }
 
         private static void PressElemByTagName(ChromeDriver driver, string tagName, int elemntPosition, int sleep)
         {
@@ -68,6 +98,13 @@ namespace Parser.Services
         {
             var searchString = driver.FindElement(By.Name(tagName));
             searchString.SendKeys(phoneNumber);
+            Thread.Sleep(sleep);
+        }
+
+        private static void AddDataToInputByTagName(ChromeDriver driver, string tagName, int elemntPosition, int sleep, string phoneNumber)
+        {
+            var inputs = driver.FindElements(By.TagName(tagName));
+            inputs[elemntPosition].SendKeys(phoneNumber);
             Thread.Sleep(sleep);
         }
     }
