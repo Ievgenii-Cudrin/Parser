@@ -14,20 +14,21 @@ namespace Parser.Settings
             return options;
         }
 
-        public static string GetInfoTypeFromUser(string firtsType, string secondType)
+        public static string GetInfoTypeFromUser(string firtsType, string secondType, string thirdType)
         {
             var userChoice = "";
             var isUserChoiseIsCorrect = false;
 
             do
             {
-                Console.WriteLine($"Данные с какого файла читаем? - {firtsType} или {secondType}:");
+                Console.WriteLine($"Данные с какого файла читаем? - {firtsType}, {secondType}, {thirdType}:");
                 Console.WriteLine($"1. {firtsType}");
                 Console.WriteLine($"2. {secondType}");
-                Console.WriteLine("Введите 1 или 2 и нажмите Enter: ");
+                Console.WriteLine($"3. {thirdType}");
+                Console.WriteLine("Введите 1 или 2 или 3 и нажмите Enter: ");
                 userChoice = Console.ReadLine();
 
-                isUserChoiseIsCorrect = userChoice == "1" || userChoice == "2";
+                isUserChoiseIsCorrect = userChoice == "1" || userChoice == "2" || userChoice == "3";
                 if (!isUserChoiseIsCorrect)
                     Console.WriteLine("\nВведено неверное значение, повторите Ваш выбор.\n");
             } while (!isUserChoiseIsCorrect);

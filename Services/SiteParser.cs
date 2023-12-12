@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using HtmlAgilityPack;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace Parser.Services
@@ -85,6 +86,45 @@ namespace Parser.Services
             }
 
             return correctList;
+        }
+
+
+        public static List<string> GetSecretNamesTg(ChromeDriver driver, string phoneNumber, bool shouldReturn)
+        {
+            var spans = driver.FindElements(By.ClassName("input-message-input"));
+            spans[0].Click();
+            spans[0].Clear();
+            spans[0].SendKeys(phoneNumber);
+            spans[0].SendKeys(Keys.Enter);
+            Thread.Sleep(4000);
+            var info = driver.FindElements(By.ClassName("spoilers-container"));
+            var details = info[info.Count - 1].Text.Replace(Environment.NewLine, ",");
+            var listWithIfo = new List<string>();
+
+            if (details.Contains("результатов по запросу"))
+            {
+                var htmlWithInfo = driver.FindElements(By.ClassName("document-ico"));
+                htmlWithInfo[htmlWithInfo.Count - 1].Click();
+                string directloc = @"C:\Users\ievge\Downloads";
+                var files = Directory.EnumerateFiles(directloc, "*", SearchOption.AllDirectories).ToList();
+                var htmlDoc = new HtmlDocument();
+                details = File.ReadAllText(files[files.Count - 1]);
+                htmlDoc.LoadHtml(details);
+
+                var nodes = htmlDoc.DocumentNode.SelectNodes("//div");
+
+                foreach (var node in nodes)
+                    listWithIfo.Add(node.InnerText.Replace(" ", "").Replace("\n", ""));
+
+                details = String.Join(", ", listWithIfo.ToArray());
+
+            }
+
+            if (details.Length > 5000)
+                details = details.Substring(0, 5000);
+
+
+            return new List<string>() { details.Replace("├", "") };
         }
 
         private static void PressElemByTagName(ChromeDriver driver, string tagName, int elemntPosition, int sleep)
