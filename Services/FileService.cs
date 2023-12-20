@@ -14,9 +14,10 @@ namespace Parser.Services
             var siteId = Settings.Settings.GetInfoTypeFromUser("ПСБ", "Тиня", "Телега");
             var filesWithNumbers = Settings.Settings.GetInfoTypeFromUser("excel.xlsx", ".txt - файл с Генчика", "Выбирай 1 или 2") == "2" ?
                 GetDataFromTxtFile(): GetDataFromExcelFile();
-            var driverAfterLogin = siteId == "1" ? SiteParser.LoginToSite(psbBaseUrl) : siteId == "2" ? SiteParser.LoginToSite(tinBaseUrl) : SiteParser.LoginToSite(tgBaseUrl);
-            //var driverAfterLogin = SiteParser.LoginToSite(tgBaseUrl);
-
+            var driverAfterLogin = siteId == "1" ? SiteParser.LoginToSite(psbBaseUrl) : 
+                siteId == "2" ? SiteParser.LoginToSite(tinBaseUrl) : 
+                SiteParser.LoginToSite(tgBaseUrl);
+            
             var shouldReturn = false;
 
             for (int k = 0; k < filesWithNumbers.Count; k++)
@@ -25,7 +26,7 @@ namespace Parser.Services
                 workbook.Worksheets.Clear();
                 var ws = workbook.Worksheets.Add("WriteToCell");
 
-                for (int i = 0; i <= 5; i++)
+                for (int i = 40; i <= 45; i++)
                 //for (int i = 0; i <= filesWithNumbers[k].Count - 1; i++)
                 {
                     try

@@ -11,14 +11,14 @@ namespace Parser.Services
             ChromeOptions options = Settings.Settings.GetChromeOptions();
             IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl(baseUrl);
-            Thread.Sleep(3000);
+            Thread.Sleep(10000);
 
             return (ChromeDriver)driver;
         }
 
         public static List<string> GetSecretNamesPsb(ChromeDriver driver, string phoneNumber, bool shouldReturn)
         {
-            phoneNumber = phoneNumber.Split(" ")[0].Split(".")[1];
+            phoneNumber = phoneNumber.Split(" ")[0];
             if (shouldReturn)
             {
                 // go back after phone number checking
@@ -60,15 +60,14 @@ namespace Parser.Services
         public static List<string> GetSecretNamesTin(ChromeDriver driver, string phoneNumber, bool shouldReturn)
         {
             if (shouldReturn)
-                PressElemByTagName(driver, "a", 17, 1500);
+                PressElemByTagName(driver, "a", 17, 2500);
 
             // press Send By phone btn
-            PressElemByTagName(driver, "a", 25, 1500);
+            PressElemByTagName(driver, "a", 25, 2500);
 
             phoneNumber = phoneNumber[0].ToString() == "+" ? phoneNumber.Remove(0, 2) : phoneNumber.Remove(0, 1); 
             // put phone number
-            AddDataToInputByTagName(driver, "input", 0, 1500, phoneNumber);
-            //AddDataToInputByTagName(driver, "input", 0, 2000, "9143735917");
+            AddDataToInputByTagName(driver, "input", 0, 2500, phoneNumber);
 
             // press on element to load results
             PressElemByTagName(driver, "h2", 2, 2000);
@@ -96,14 +95,14 @@ namespace Parser.Services
             spans[0].Clear();
             spans[0].SendKeys(phoneNumber);
             spans[0].SendKeys(Keys.Enter);
-            Thread.Sleep(4000);
+            Thread.Sleep(5000);
             var info = driver.FindElements(By.ClassName("spoilers-container"));
             var details = info[info.Count - 1].Text.Replace(Environment.NewLine, ",");
             var listWithIfo = new List<string>();
 
             if (details.Contains("результатов по запросу"))
             {
-                var htmlWithInfo = driver.FindElements(By.ClassName("document-ico"));
+                var htmlWithInfo = driver.FindElements(By.ClassName("document-container"));
                 htmlWithInfo[htmlWithInfo.Count - 1].Click();
                 string directloc = @"C:\Users\ievge\Downloads";
                 var files = Directory.EnumerateFiles(directloc, "*", SearchOption.AllDirectories).ToList();
