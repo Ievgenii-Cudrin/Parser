@@ -104,13 +104,14 @@ namespace Parser.Services
             {
                 var htmlWithInfo = driver.FindElements(By.ClassName("document-container"));
                 htmlWithInfo[htmlWithInfo.Count - 1].Click();
-                string directloc = @"C:\Users\ievge\Downloads";
+                string directloc = @"C:\Users\user\Downloads";
                 var files = Directory.EnumerateFiles(directloc, "*", SearchOption.AllDirectories).ToList();
                 var htmlDoc = new HtmlDocument();
                 details = File.ReadAllText(files[files.Count - 1]);
                 htmlDoc.LoadHtml(details);
 
                 var nodes = htmlDoc.DocumentNode.SelectNodes("//div");
+                Thread.Sleep(3000);
 
                 foreach (var node in nodes)
                     listWithIfo.Add(node.InnerText.Replace(" ", "").Replace("\n", ""));

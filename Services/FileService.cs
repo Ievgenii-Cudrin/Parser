@@ -26,7 +26,7 @@ namespace Parser.Services
                 workbook.Worksheets.Clear();
                 var ws = workbook.Worksheets.Add("WriteToCell");
 
-                for (int i = 40; i <= 45; i++)
+                for (int i = 44; i <= 50; i++)
                 //for (int i = 0; i <= filesWithNumbers[k].Count - 1; i++)
                 {
                     try
@@ -58,7 +58,7 @@ namespace Parser.Services
         {
             var listsWithPhones = new List<List<string>>();
 
-            string directloc = @"D:\Kudrin\Projects\numgen\results";
+            string directloc = @"D:\user\Projects\numgen\results";
             var files = Directory.EnumerateFiles(directloc, "*", SearchOption.AllDirectories).ToList();
             foreach (var file in files)
                 listsWithPhones.Add(File.ReadAllText(file).Split(System.Environment.NewLine).ToList());
